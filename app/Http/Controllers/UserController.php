@@ -12,6 +12,7 @@ class UserController extends Controller
         $body = json_decode($request->getContent(), true);
 
         $user = User::find((int)$body['id']);
+
         $user->password = $body['password'];
         $user->email = $body['email'];
     
@@ -29,7 +30,7 @@ class UserController extends Controller
             'client_id' => env('DISCORD_ID'),
             'client_secret' => env('DISCORD_SECRET'),
             'grant_type' => 'authorization_code',
-            'redirect_uri' => 'http://localhost:8000/api/users/add_discord'
+            'redirect_uri' => 'http://localhost:8000/api/user/add'
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     
@@ -78,7 +79,7 @@ class UserController extends Controller
 
     public function get(string $id)
     {
-        return User::find($id);
+        return response()->json(User::find($id));
     }
 
     public function getAll()

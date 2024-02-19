@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/user/add', [UserController::class, 'addDiscord']);
+
 Route::get('/user/{id}', [UserController::class, 'get']);
 
 Route::get('/users', [UserController::class, 'getAll']);
 
 Route::post('/user', [UserController::class, 'store']);
-
-Route::get('/users/add_discord', [UserController::class, 'addDiscord']);
