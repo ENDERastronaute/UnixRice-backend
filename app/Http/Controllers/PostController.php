@@ -18,8 +18,8 @@ class PostController extends Controller
         $post = new Post();
         $post->content = json_encode($body["content"]);
         $post->author_id = $body["author"];
-        $post->channel_id = $channel['id'];
-        
+        $post->channel_id = $channel->id;
+
         $post->save();
 
         return true;
