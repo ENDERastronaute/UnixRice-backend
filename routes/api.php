@@ -24,5 +24,5 @@ Route::post('/user', [UserController::class, 'store']);
 Route::get('/post/{id}', [PostController::class,'get']);
 Route::get('/posts/{channel}', [PostController::class, 'getAll']);
 Route::post('/post', [PostController::class, 'store']);
-Route::put('/post', [PostController::class,'update']);
-Route::delete('/post', [PostController::class,'delete']);
+Route::patch('/post/{id}', [PostController::class,'update']);
+Route::delete('/post/{id}', [PostController::class,'destroy']);

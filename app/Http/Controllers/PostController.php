@@ -44,8 +44,7 @@ class PostController extends Controller
         $body = json_decode($request->getContent(), true);
 
         $post = Post::find($id);
-        $post->title = $body['title'];
-        $post->description = $body['description'];
+        $post->content = json_encode($body['content']);
 
         $post->save();
     }
@@ -54,5 +53,6 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->delete();
+        echo true;
     }
 }
