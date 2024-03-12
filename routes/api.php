@@ -21,6 +21,7 @@ Route::get('/user/{id}', [UserController::class, 'get']);
 Route::get('/users', [UserController::class, 'getAll']);
 Route::post('/user', [UserController::class, 'store']);
 
+Route::post('/post/{id}/vote', [PostController::class, 'vote']);
 Route::get('/post/{id}', [PostController::class,'get']);
 Route::get('/posts/{channel}', [PostController::class, 'getAll']);
 Route::post('/post', [PostController::class, 'store']);

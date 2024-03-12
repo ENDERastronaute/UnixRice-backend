@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 return new class extends Migration
 {
     /**
@@ -12,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_award', function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('award_id');
+            $table->foreignId('post_id');
+            $table->smallInteger('value');
             $table->timestamps();
         });
     }
@@ -24,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_award');
+        Schema::dropIfExists('votes');
     }
 };
-
