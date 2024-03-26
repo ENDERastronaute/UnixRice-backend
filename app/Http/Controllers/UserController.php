@@ -17,6 +17,8 @@ class UserController extends Controller
         $user->email = $body['email'];
     
         $user->save();
+
+        return json_encode($user->avatar);
     }
 
     public function addDiscord(User $user)
@@ -74,7 +76,7 @@ class UserController extends Controller
     
         $user->save();
     
-        return redirect(env('APP_FRONTEND') . "/login?id=$user->id");
+        return redirect(env('APP_FRONTEND') . "/create-account?id=$user->id");
     }
 
     public function get(string $id)
@@ -97,5 +99,57 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function login() {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, env('DISCORD_API_TOKEN_URL'));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            'code' => $_GET['code'],
+            'client_id' => env('DISCORD_ID'),
+            'client_secret' => env('DISCORD_SECRET'),
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => 'http://localhost:8000/api/user/add'
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    
+        $result = curl_exec($ch);
+    
+        if (!$result)
+        {
+            echo curl_error($ch);
+        }
+    
+        $result = json_decode($result, true);
+    
+        $access_token = $result['access_token'];
+    
+        $users_url = env('DISCORD_API_USER_URL');
+        $header = array("Authorization: Bearer $access_token", "Content-Type: application/x-xxx-form-urlencoded");
+    
+        $ch = curl_init();
+    
+        curl_setopt($ch, CURLOPT_URL, $users_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+    
+        $result = curl_exec($ch);
+    
+        $result = json_decode($result, true);
+
+        if ($user = User::where('discord_id', '=', $result['id'])) {
+            return json_encode(['avatar' => $user->avatar, 'id' => $user->id]);
+        }
+        
+        return json_encode(false);
     }
 }

@@ -15,9 +15,9 @@ class Post extends Model
     {
         return $this->belongsTo(Channel::class);
     }
-    public function user(): BelongsTo
+    public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 
     public function votes(): HasMany

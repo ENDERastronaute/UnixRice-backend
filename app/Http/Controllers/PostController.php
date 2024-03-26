@@ -24,7 +24,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return true;
+        return new PostResource($post);
     }
 
     public function get(string $id)

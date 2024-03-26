@@ -18,8 +18,8 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'channel_id' => $this->channel_id,
             'author_id' => $this->author_id,
-            'username' => $this->user->username,
-            'avatar' => $this->user->avatar,
+            'username' => $this->author->username,
+            'avatar' => $this->author->avatar,
             'votes' => VoteResource::collection($this->votes),
             'content' => $this->content
         ];

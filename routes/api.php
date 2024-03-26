@@ -20,6 +20,7 @@ Route::get('/user/add', [UserController::class, 'addDiscord']);
 Route::get('/user/{id}', [UserController::class, 'get']);
 Route::get('/users', [UserController::class, 'getAll']);
 Route::post('/user', [UserController::class, 'store']);
+ROUTE::GET('/login', [UserController::class, 'login']);
 
 Route::post('/post/{id}/vote', [PostController::class, 'vote']);
 Route::get('/post/{id}', [PostController::class,'get']);
