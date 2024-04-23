@@ -13,14 +13,27 @@ class PostController extends Controller
 {
     public function store(Request $request)
     {
-        $body = json_decode($request->getContent(), true);
+        $content = json_decode($request->input('content'));
 
-        $channel = Channel::where('name', $body['channel'])->first();
+        $channel = Channel::where('name', $request->input('channel'))->first();
 
         $post = new Post();
-        $post->content = json_encode($body["content"]);
-        $post->author_id = $body["author"];
+        $post->author_id = intval($request->input('author'));
         $post->channel_id = $channel->id;
+
+        $content->images = [];
+
+        foreach ($request->allFiles() as $key => $file) {
+            if (strpos($key, 'image_') === 0) {
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                $file->move(public_path('images'), $filename);
+
+                $content->images[] = $filename;
+            }
+        }
+
+        $post->content = json_encode($content);
 
         $post->save();
 

@@ -17,7 +17,7 @@ class Post extends Model
     }
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'author_id', 'id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public function votes(): HasMany

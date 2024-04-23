@@ -21,7 +21,7 @@ class UserController extends Controller
         return json_encode($user->avatar);
     }
 
-    public function addDiscord(User $user)
+    public function addDiscord()
     {
         $ch = curl_init();
 
@@ -93,12 +93,22 @@ class UserController extends Controller
 
     public function update(Request $request, string $id)
     {
-        
+        $body = json_decode($request->getContent(), true);
+
+        $user = User::find($id);
+        $user->email = json_encode($body['email']);
+
+        $user->save();
+
+        return true;
     }
 
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+
+        echo true;
     }
 
     public function login() {
@@ -111,7 +121,7 @@ class UserController extends Controller
             'client_id' => env('DISCORD_ID'),
             'client_secret' => env('DISCORD_SECRET'),
             'grant_type' => 'authorization_code',
-            'redirect_uri' => 'http://localhost:8000/api/user/add'
+            'redirect_uri' => 'http://localhost:5173/login'
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     
@@ -146,7 +156,7 @@ class UserController extends Controller
     
         $result = json_decode($result, true);
 
-        if ($user = User::where('discord_id', '=', $result['id'])) {
+        if ($user = User::where('discord_id', '=', $result['id'])->first()) {
             return json_encode(['avatar' => $user->avatar, 'id' => $user->id]);
         }
         

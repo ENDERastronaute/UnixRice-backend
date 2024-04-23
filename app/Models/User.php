@@ -15,6 +15,21 @@ class User extends Model
 
     public function posts(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class, 'author_id');
+    }
+
+    public function votes(): hasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($user) {
+            $user->votes()->delete();
+            $user->posts()->delete();
+        });
     }
 }
