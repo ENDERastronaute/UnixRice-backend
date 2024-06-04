@@ -18,8 +18,10 @@ class UserFactory extends Factory
     {
         return [
             'username' => fake()->userName(),
-            'discord_id' => 'feur',
-            'avatar' => 'feur'
+            'discord_id' => fake()->uuid(),
+            'avatar' => fake()->uuid(),
+            'email' => fake()->email(),
+            'password' => fake()->password()
         ];
     }
 }

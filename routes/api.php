@@ -26,6 +26,7 @@ ROUTE::GET('/login', [UserController::class, 'login']);
 
 Route::post('/post/{id}/vote', [PostController::class, 'vote']);
 Route::get('/post/{id}', [PostController::class,'get']);
+Route::get('/posts/trending', [PostController::class, 'getTrending']);
 Route::get('/posts/{channel}', [PostController::class, 'getAll']);
 Route::post('/post', [PostController::class, 'store']);
 Route::patch('/post/{id}', [PostController::class,'update']);

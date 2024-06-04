@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Channel;
 use App\Models\Vote;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -50,6 +51,29 @@ class PostController extends Controller
         $channel = Channel::where('name', $channel)->first();
 
         $posts = Post::where('channel_id', $channel['id'])->get();
+
+        return PostResource::collection($posts);
+    }
+
+    public function getTrending()
+    {   
+        $posts = Post::with('votes')
+            ->get()
+            ->filter(function ($post) {
+                $threshold = 10;
+
+                $votes = $post->votes;
+
+                $votesCount = 0;
+
+                foreach ($votes as $vote) {
+                    $votesCount++;
+                }
+
+                $hoursSinceCreation = Carbon::now()->diffInHours($post->created_at) + 1;
+
+                return $votesCount / $hoursSinceCreation > $threshold;
+            });
 
         return PostResource::collection($posts);
     }
